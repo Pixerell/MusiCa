@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#000000"
+    tools:context=".trackScreenMain" >
+
+    <ImageView
+        android:id="@+id/bgImage"
+        android:layout_width="315dp"
+        android:layout_height="505dp"
+        android:layout_marginStart="104dp"
+        android:layout_marginTop="58dp"
+        android:layout_marginEnd="103dp"
+        android:layout_marginBottom="261dp"
+
+
+
+        android:backgroundTint="#00FF0000"
+        android:src="@drawable/sample_app_icon_merged"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.387"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.451"
+                />
+
+    <TextView
+        android:id="@+id/logoText"
+        android:layout_width="277dp"
+        android:layout_height="89dp"
+        android:layout_marginStart="131dp"
+        android:layout_marginTop="18dp"
+        android:layout_marginEnd="154dp"
+        android:text="MusiCa"
+        android:textColor="@color/white"
+        android:textSize="48dp"
+        android:gravity="center"
+
+        android:shadowColor="#991DB5"
+        android:shadowDx="5"
+        android:shadowDy="5"
+        android:shadowRadius="2"
+
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.423"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.634" />
+</androidx.constraintlayout.widget.ConstraintLayout>
