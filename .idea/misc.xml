@@ -1,5 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="DesignSurface">
+    <option name="filePathToZoomLevelMap">
+      <map>
+        <entry key="..\:/Users/student/StudioProjects/MusiCa/app/src/main/res/layout/libraries.xml" value="0.2" />
+        <entry key="..\:/Users/student/StudioProjects/MusiCa/app/src/main/res/layout/loading_screen.xml" value="0.36666666666666664" />
+        <entry key="..\:/Users/student/StudioProjects/MusiCa/app/src/main/res/layout/music_items.xml" value="0.22" />
+        <entry key="..\:/Users/student/StudioProjects/MusiCa/app/src/main/res/layout/settings.xml" value="0.18" />
+        <entry key="..\:/Users/student/StudioProjects/MusiCa/app/src/main/res/layout/track_screen_main.xml" value="0.33" />
+        <entry key="..\:/Users/student/StudioProjects/MusiCa/app/src/main/res/menu/popup.xml" value="0.36666666666666664" />
+        <entry key="..\:/Users/student/StudioProjects/MusiCa/app/src/main/res/menu/settings_popup.xml" value="0.36666666666666664" />
+      </map>
+    </option>
+  </component>
   <component name="ProjectRootManager" version="2" languageLevel="JDK_1_8" default="true" project-jdk-name="1.8" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/build/classes" />
   </component>

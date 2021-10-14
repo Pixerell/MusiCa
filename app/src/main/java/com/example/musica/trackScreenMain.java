@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
 import android.annotation.SuppressLint;
+import android.content.ContentUris;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -14,19 +15,23 @@ import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.provider.MediaStore;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
+import android.widget.PopupMenu;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.snackbar.Snackbar;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -37,8 +42,12 @@ import static com.example.musica.librariesMain.repeatOn;
 public class trackScreenMain extends AppCompatActivity implements MediaPlayer.OnCompletionListener {
 
 
+
+    private Context mContext;
+    private ArrayList<MusicFiles> mFiles;
+
     TextView song_name, artist_name, duration_played, duration_total, now_playing_text;
-    ImageView cover_art, nextBtn, previousBtn, backBtn, shuffleBtn, repeatBtn;
+    ImageView cover_art, nextBtn, previousBtn, backBtn, shuffleBtn, repeatBtn, menuBtn, returnBtn;
     FloatingActionButton playPauseBtn;
     SeekBar seekBar;
     int position = -1;
@@ -183,11 +192,44 @@ public class trackScreenMain extends AppCompatActivity implements MediaPlayer.On
 
                     }
                 });
+
+                backBtn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Intent intent = new Intent(trackScreenMain.this, librariesMain.class);
+                        trackScreenMain.this.startActivity(intent);
+                    }
+                });
+
+                menuBtn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        PopupMenu popupMenu = new PopupMenu(trackScreenMain.this, view);
+                        popupMenu.getMenuInflater().inflate(R.menu.settings_popup, popupMenu.getMenu());
+                        popupMenu.show();
+                        popupMenu.setOnMenuItemClickListener((item -> {
+                            switch (item.getItemId()) {
+                                case R.id.settings:
+                                    Toast.makeText(trackScreenMain.this, "Settings Opened", Toast.LENGTH_SHORT).show();
+                                    Intent intent = new Intent(trackScreenMain.this, settings.class);
+                                    trackScreenMain.this.startActivity(intent);
+                                    break;
+                                case R.id.quit:
+                                    System.exit(0);
+                                    break;
+                            }
+                            return true;
+                        }));
+                    }
+                });
+
+
             }
         };
 
         playThread.start();
     }
+
 
     private void repeatBtnClicked() {
 
@@ -567,6 +609,9 @@ public class trackScreenMain extends AppCompatActivity implements MediaPlayer.On
         backBtn = findViewById(R.id.back_btn);
         shuffleBtn = findViewById(R.id.id_shuffle);
         repeatBtn = findViewById(R.id.id_repeat);
+        returnBtn = findViewById(R.id.back_btn);
+
+        menuBtn = findViewById(R.id.menu_btn);
 
         playPauseBtn = findViewById(R.id.play_pause);
 

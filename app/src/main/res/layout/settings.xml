@@ -3,16 +3,15 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#00FFCC">
+    android:background="@drawable/track_screen_bg">
 
     <TextView
         android:id="@+id/textView2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="243dp"
-        android:layout_marginBottom="424dp"
-        android:text="HEEEEEEY"
-        android:textColor="@color/design_default_color_primary_dark"
+        android:gravity="center"
+        android:text="THIS WINDOW IS IN PROGRESS         I LIKE SNICKERS"
+        android:textColor="@color/buttonTintColorBackground"
         android:textSize="48dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
