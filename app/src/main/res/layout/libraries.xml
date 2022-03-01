@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -31,10 +31,29 @@
     <androidx.viewpager.widget.ViewPager
         android:id="@+id/viewPager"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:ignore="SpeakableTextPresentCheck" >
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tabLayout"
+        tools:ignore="SpeakableTextPresentCheck" />
+    <!--android:layout_alignBottom="@id/bottom_Player" -->
 
 
-    </androidx.viewpager.widget.ViewPager>
+    <!-- Код для будущего мини плеера -->
 
-</LinearLayout>
+   <!-- </androidx.viewpager.widget.ViewPager> -->
+<!--
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:id="@+id/bottom_Player">
+
+        <fragment
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:name="com.example.musica.PlayingBottomFragment"
+            tools:layout="@layout/fragment_playing_bottom"/>
+
+    </FrameLayout>
+
+-->
+    </RelativeLayout>

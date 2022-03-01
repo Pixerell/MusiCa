@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".PlayingBottomFragment">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/card_bottom_player"
+        android:background="@color/colorPrimaryDark"
+        android:padding="5dp">
+
+        <ImageView
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:src="@drawable/sample_music_icon"
+            android:id="@+id/bottom_album_art"
+            android:scaleType="centerCrop"/>
+        <ImageView
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:id="@+id/skip_next_bottom"
+            android:src="@drawable/skip_next"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            app:tint="@color/buttonTintColor"
+            android:layout_marginEnd="10dp"/>
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/play"
+            android:layout_toStartOf="@+id/skip_next_bottom"
+            android:layout_marginEnd="10dp"
+            app:fabSize="mini"
+            android:layout_centerVertical="true"
+            app:tint="@color/buttonTintColor"
+            app:backgroundTint="@color/buttonTintColorBackground"
+
+            android:id="@+id/play_pause_bottom"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/song_name_bottom"
+            android:text="Shit that is playing rn"
+            android:textColor="@color/white"
+            android:layout_marginTop="5dp"
+            android:layout_marginStart="15dp"
+            android:layout_toEndOf="@+id/bottom_album_art"
+            android:textSize="18dp"
+            android:maxLines="1"
+            android:layout_toStartOf="@id/play_pause_bottom"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/song_artist_bottom"
+            android:text="Shit who is playing rn"
+            android:textColor="@color/white"
+            android:layout_marginTop="5dp"
+            android:layout_marginStart="15dp"
+            android:layout_toEndOf="@+id/bottom_album_art"
+            android:layout_below="@id/song_name_bottom"
+            android:textSize="15sp"
+            android:maxLines="1"
+            android:layout_toStartOf="@id/play_pause_bottom"/>
+
+
+
+    </RelativeLayout>
+
+</FrameLayout>

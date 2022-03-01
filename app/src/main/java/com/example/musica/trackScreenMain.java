@@ -4,9 +4,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
 import android.annotation.SuppressLint;
+import android.content.ComponentName;
 import android.content.ContentUris;
 import android.content.Context;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.PorterDuff;
@@ -15,10 +17,12 @@ import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.IBinder;
 import android.provider.MediaStore;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.Window;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
@@ -35,16 +39,20 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Random;
 
+import static com.example.musica.MusicAdapter.mFilesAdapter;
+import static com.example.musica.PlaylistExpansionAdapter.playlistFiles;
+import static com.example.musica.librariesMain.albums;
 import static com.example.musica.librariesMain.musicFiles;
 import static com.example.musica.librariesMain.shuffleOn;
 import static com.example.musica.librariesMain.repeatOn;
 
-public class trackScreenMain extends AppCompatActivity implements MediaPlayer.OnCompletionListener {
+public class trackScreenMain extends AppCompatActivity
+        implements MediaPlayer.OnCompletionListener, ActionPlaying, ServiceConnection {
 
 
 
     private Context mContext;
-    private ArrayList<MusicFiles> mFiles;
+    static ArrayList<MusicFiles> mFiles;
 
     TextView song_name, artist_name, duration_played, duration_total, now_playing_text;
     ImageView cover_art, nextBtn, previousBtn, backBtn, shuffleBtn, repeatBtn, menuBtn, returnBtn;
@@ -57,6 +65,7 @@ public class trackScreenMain extends AppCompatActivity implements MediaPlayer.On
     static MediaPlayer mediaPlayer;
     private Handler handler = new Handler();
     private  Thread playThread, previousThread, nextThread;
+    MusicService musicService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,8 +82,6 @@ public class trackScreenMain extends AppCompatActivity implements MediaPlayer.On
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 if (mediaPlayer != null && fromUser){
                   mediaPlayer.seekTo(progress * 1000);
-
-
 
                 }
             }
@@ -121,14 +128,16 @@ public class trackScreenMain extends AppCompatActivity implements MediaPlayer.On
 
     @Override
     protected void onResume() {
-        // Spawning multiple threads is retarded
+        Intent intent = new Intent(this, MusicService.class);
+        bindService(intent, this, BIND_AUTO_CREATE);
         playThreadBtn();
-        //nextThreadBtn();
-       // previousThreadBtn();
         super.onResume();
     }
-
-
+    @Override
+    protected void onPause() {
+        super.onPause();
+        unbindService(this);
+    }
     // Main Thread. All button clicks are registered here
     private void playThreadBtn() {
         playThread = new Thread(){
@@ -209,11 +218,14 @@ public class trackScreenMain extends AppCompatActivity implements MediaPlayer.On
                         popupMenu.show();
                         popupMenu.setOnMenuItemClickListener((item -> {
                             switch (item.getItemId()) {
+                                /*
                                 case R.id.settings:
                                     Toast.makeText(trackScreenMain.this, "Settings Opened", Toast.LENGTH_SHORT).show();
                                     Intent intent = new Intent(trackScreenMain.this, settings.class);
                                     trackScreenMain.this.startActivity(intent);
                                     break;
+
+                                 */
                                 case R.id.quit:
                                     System.exit(0);
                                     break;
@@ -229,7 +241,6 @@ public class trackScreenMain extends AppCompatActivity implements MediaPlayer.On
 
         playThread.start();
     }
-
 
     private void repeatBtnClicked() {
 
@@ -247,8 +258,6 @@ public class trackScreenMain extends AppCompatActivity implements MediaPlayer.On
     }
 
     private void shuffleBtnClicked() {
-
-
         shuffleOn = !shuffleOn;
 
         if (shuffleOn){
@@ -262,7 +271,7 @@ public class trackScreenMain extends AppCompatActivity implements MediaPlayer.On
 
     }
 
-    private void playPauseBtnClicked() {
+    public void playPauseBtnClicked() {
 
         if (mediaPlayer.isPlaying()){
             playPauseBtn.setImageResource(R.drawable.play);
@@ -304,7 +313,7 @@ public class trackScreenMain extends AppCompatActivity implements MediaPlayer.On
         }
     }
 
-    private void nextBtnBtnClicked() {
+    public void nextBtnBtnClicked() {
 
        if (mediaPlayer.isPlaying()){
            mediaPlayer.stop();
@@ -319,30 +328,30 @@ public class trackScreenMain extends AppCompatActivity implements MediaPlayer.On
                position = ((position + 1) % listSongs.size());
            }
 
+
            uri = Uri.parse(listSongs.get(position).getPath());
            mediaPlayer = MediaPlayer.create(getApplicationContext(), uri);
            metaData(uri);
            song_name.setText(listSongs.get(position).getTitle());
            artist_name.setText(listSongs.get(position).getArtist());
+           seekBar.setMax(mediaPlayer.getDuration() / 1000);
            seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
                @Override
                public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+
                    if (mediaPlayer != null && fromUser){
                        mediaPlayer.seekTo(progress * 1000);
-
-
-
                    }
+
+
                }
 
                @Override
                public void onStartTrackingTouch(SeekBar seekBar) {
-
                }
 
                @Override
                public void onStopTrackingTouch(SeekBar seekBar) {
-
                }
            });
 
@@ -352,12 +361,13 @@ public class trackScreenMain extends AppCompatActivity implements MediaPlayer.On
                    if (mediaPlayer != null) {
 
                        int mCurrentPosition = mediaPlayer.getCurrentPosition() / 1000;
+
+                       seekBar.setMax(mediaPlayer.getDuration() / 1000);
+
                        seekBar.setProgress(mCurrentPosition);
                        duration_played.setText(formattedTime(mCurrentPosition));
                    }
-
                    handler.postDelayed(this, 1000);
-
                }
            });
            mediaPlayer.setOnCompletionListener(this);
@@ -384,25 +394,23 @@ public class trackScreenMain extends AppCompatActivity implements MediaPlayer.On
            metaData(uri);
            song_name.setText(listSongs.get(position).getTitle());
            artist_name.setText(listSongs.get(position).getArtist());
+
+           seekBar.setMax(mediaPlayer.getDuration() / 1000);
            seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
                @Override
                public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                    if (mediaPlayer != null && fromUser){
                        mediaPlayer.seekTo(progress * 1000);
 
-
-
                    }
                }
 
                @Override
                public void onStartTrackingTouch(SeekBar seekBar) {
-
                }
 
                @Override
                public void onStopTrackingTouch(SeekBar seekBar) {
-
                }
            });
 
@@ -412,6 +420,9 @@ public class trackScreenMain extends AppCompatActivity implements MediaPlayer.On
                    if (mediaPlayer != null) {
 
                        int mCurrentPosition = mediaPlayer.getCurrentPosition() / 1000;
+
+                       seekBar.setMax(mediaPlayer.getDuration() / 1000);
+
                        seekBar.setProgress(mCurrentPosition);
                        duration_played.setText(formattedTime(mCurrentPosition));
                    }
@@ -432,7 +443,8 @@ public class trackScreenMain extends AppCompatActivity implements MediaPlayer.On
 
     }
 
-    private void previousBtnClicked() {
+    public void previousBtnClicked() {
+
         if (mediaPlayer.isPlaying()){
             mediaPlayer.stop();
             mediaPlayer.release();
@@ -568,12 +580,25 @@ public class trackScreenMain extends AppCompatActivity implements MediaPlayer.On
             return totalOut;
         }
 
-
     }
 
     private void getIntentMethod() {
         position = getIntent().getIntExtra("position", -1);
-        listSongs = musicFiles;
+        String sender = getIntent().getStringExtra("sender");
+        if (sender != null && sender.equals("albumDetails")){
+            listSongs = playlistFiles;
+        }
+        else {
+            if (mFilesAdapter != null){
+                listSongs = mFilesAdapter;
+            }
+
+            else {
+                listSongs = musicFiles;
+            }
+        }
+
+        //listSongs = musicFiles;
         if (listSongs != null){
             playPauseBtn.setImageResource(R.drawable.pause);
             uri = Uri.parse(listSongs.get(position).getPath());
@@ -649,8 +674,12 @@ public class trackScreenMain extends AppCompatActivity implements MediaPlayer.On
 
     public void ImageAnimation(Context context, ImageView imageView, Bitmap bitmap) {
 
-        Animation animaOut = AnimationUtils.loadAnimation(context, android.R.anim.fade_out);
-        Animation animaIn = AnimationUtils.loadAnimation(context, android.R.anim.fade_in);
+       // Animation animaOut = AnimationUtils.loadAnimation(context, android.R.anim.fade_out);
+       // Animation animaIn = AnimationUtils.loadAnimation(context, android.R.anim.fade_in);
+
+        Animation animaIn = AnimationUtils.loadAnimation(context, R.anim.logo_alpha1);
+        Animation animaOut = AnimationUtils.loadAnimation(context, R.anim.logo_alpha3);
+
         animaOut.setAnimationListener(new Animation.AnimationListener() {
             @Override
             public void onAnimationStart(Animation animation) {
@@ -676,7 +705,7 @@ public class trackScreenMain extends AppCompatActivity implements MediaPlayer.On
 
                     }
                 });
-                imageView.startAnimation(animaIn);
+                imageView.startAnimation(animaOut);
             }
 
             @Override
@@ -684,7 +713,7 @@ public class trackScreenMain extends AppCompatActivity implements MediaPlayer.On
 
             }
         });
-        imageView.startAnimation(animaOut);
+        imageView.startAnimation(animaIn);
     }
 
 
@@ -696,5 +725,19 @@ public class trackScreenMain extends AppCompatActivity implements MediaPlayer.On
             mediaPlayer.start();
             mediaPlayer.setOnCompletionListener(this);
         }
+    }
+
+    @Override
+    public void onServiceConnected(ComponentName name, IBinder service) {
+        MusicService.MyBinder myBinder = (MusicService.MyBinder)service;
+        musicService = myBinder.getService();
+        // Toast.makeText(this, "Connected" + musicService, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onServiceDisconnected(ComponentName name) {
+
+        musicService = null;
+
     }
 }

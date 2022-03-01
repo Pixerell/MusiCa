@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import static com.example.musica.librariesMain.musicFiles;
+import static com.example.musica.trackScreenMain.mFiles;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -21,7 +22,7 @@ import static com.example.musica.librariesMain.musicFiles;
 public class SongsFragment extends Fragment {
 
     RecyclerView recyclerView;
-    MusicAdapter musicAdapter;
+    static MusicAdapter musicAdapter;
 
 
     // TODO: Rename parameter arguments, choose names that match
@@ -73,7 +74,7 @@ public class SongsFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_songs, container, false);
         recyclerView = view.findViewById(R.id.recyclerView);
-        //recyclerView.setHasFixedSize(true);
+        // recyclerView.setHasFixedSize(true);
 
         if (!(musicFiles.size() < 1)){
             musicAdapter = new MusicAdapter(getContext(), musicFiles);

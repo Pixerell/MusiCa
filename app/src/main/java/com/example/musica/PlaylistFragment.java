@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import static com.example.musica.librariesMain.albums;
 import static com.example.musica.librariesMain.musicFiles;
 
 /**
@@ -73,8 +74,8 @@ public class PlaylistFragment extends Fragment {
         recyclerView = view.findViewById(R.id.recyclerView);
         //recyclerView.setHasFixedSize();
 
-        if (!(musicFiles.size() < 1)){
-            playlistAdapter = new PlaylistAdapter(getContext(), musicFiles);
+        if (!(albums.size() < 1)){
+            playlistAdapter = new PlaylistAdapter(getContext(), albums);
             recyclerView.setAdapter(playlistAdapter);
             recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2));
 

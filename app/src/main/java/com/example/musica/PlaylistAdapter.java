@@ -1,6 +1,7 @@
 package com.example.musica;
 
 import android.content.Context;
+import android.content.Intent;
 import android.media.MediaMetadataRetriever;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -37,8 +38,8 @@ public class PlaylistAdapter extends RecyclerView.Adapter<PlaylistAdapter.MyHold
     @Override
     public void onBindViewHolder(@NonNull MyHolder holder, int position) {
       holder.playlist_name.setText(playlistFiles.get(position).getAlbum());
-    //  byte[] image = getAlbumArt(playlistFiles.get(position).getPath());
-     byte[] image =null;
+     byte[] image = getAlbumArt(playlistFiles.get(position).getPath());
+     //   byte[] image = null;
       if (image != null) {
 
           GlideApp.with(mContext).asBitmap()
@@ -51,6 +52,14 @@ public class PlaylistAdapter extends RecyclerView.Adapter<PlaylistAdapter.MyHold
                   .load(R.drawable.sample_music_icon)
                   .into(holder.playlist_image);
       }
+      holder.itemView.setOnClickListener(new View.OnClickListener() {
+          @Override
+          public void onClick(View v) {
+              Intent intent = new Intent(mContext, PlaylistExpansion.class);
+              intent.putExtra("albumName", playlistFiles.get(position).getAlbum());
+              mContext.startActivity(intent);
+          }
+      });
     }
 
     @Override
@@ -70,7 +79,7 @@ public class PlaylistAdapter extends RecyclerView.Adapter<PlaylistAdapter.MyHold
 
         }
     }
-/*
+
     private byte[] getAlbumArt(String uri)
     {
         MediaMetadataRetriever retriever = new MediaMetadataRetriever();
@@ -79,5 +88,5 @@ public class PlaylistAdapter extends RecyclerView.Adapter<PlaylistAdapter.MyHold
         retriever.release();
         return art;
     }
-*/
+
 }

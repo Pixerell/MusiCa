@@ -22,7 +22,7 @@
             android:layout_height="30dp"
             android:layout_alignParentStart="true"
             android:layout_centerVertical="true"
-            android:layout_marginLeft="16dp"
+            android:layout_marginStart="18dp"
             android:src="@drawable/chevron_left"
             app:tint="@color/buttonTintColor" />
 
@@ -31,7 +31,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:layout_toEndOf="@id/back_btn"
+            android:layout_marginStart="-48dp"
+            android:layout_toEndOf="@+id/back_btn"
             android:background="@android:color/transparent"
             android:gravity="center_horizontal"
             android:text="@string/now_playing"
@@ -54,7 +55,7 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="400dp"
+        android:layout_height="420dp"
         android:id="@+id/card"
         android:layout_below="@+id/layout_top_btn">
 
@@ -179,7 +180,7 @@
             android:layout_height="wrap_content"
             android:text="13:37"
             android:id="@+id/durationPlayed"
-            android:textColor="@color/colorAccent"
+            android:textColor="@color/buttonTintColor"
             android:layout_marginStart="10dp"
             android:layout_alignParentStart="true"
             android:layout_centerVertical="true"/>
@@ -189,7 +190,7 @@
             android:layout_height="wrap_content"
             android:text="FOR:VER"
             android:id="@+id/durationTotal"
-            android:textColor="@color/colorAccent"
+            android:textColor="@color/buttonTintColor"
             android:layout_marginEnd="10dp"
             android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"/>
